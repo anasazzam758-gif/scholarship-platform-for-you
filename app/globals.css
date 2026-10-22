@@ -10,4 +10,18 @@
 html, body {
   background-color: #F7F5EF;
   color: #102A43;
+  /* تخصيص مؤشر الماوس ليصبح مؤشراً أكاديمياً تفاعلياً على مستوى الموقع كله */
+  cursor: default;
+}
+
+/* جعل كل الأزرار والروابط والعناصر القابلة للضغط تستخدم مؤشر التفاعل الأكاديمي */
+button, a, [role="button"], input, select {
+  cursor: pointer !important;
+}
+
+/* تأثيرات الانتقال الناعمة والـ Hover الشاملة */
+* {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
