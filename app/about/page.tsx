@@ -53,7 +53,7 @@ export default function AboutPage() {
         }
       ];
       setComments(initialComments);
-      localStorage.setItem("revitcho_feedback", JSON.stringify(initialComments));
+      localStorage.setItem("AORA_feedback", JSON.stringify(initialComments));
     }
   }, [isArabic]);
 
@@ -72,7 +72,7 @@ export default function AboutPage() {
 
     const updated = [newComment, ...comments];
     setComments(updated);
-    localStorage.setItem("revitcho_feedback", JSON.stringify(updated));
+    localStorage.setItem("AORA_feedback", JSON.stringify(updated));
     setName("");
     setCommentText("");
     setSubmitted(true);
@@ -88,14 +88,14 @@ export default function AboutPage() {
       return item;
     });
     setComments(updated);
-    localStorage.setItem("revitcho_feedback", JSON.stringify(updated));
+    localStorage.setItem("AORA_feedback", JSON.stringify(updated));
   };
 
   // صلاحية المشرف لحذف التعليقات غير اللائقة
   const handleDeleteComment = (id: string) => {
     const updated = comments.filter((item) => item.id !== id);
     setComments(updated);
-    localStorage.setItem("revitcho_feedback", JSON.stringify(updated));
+    localStorage.setItem("AORA_feedback", JSON.stringify(updated));
   };
 
   return (
@@ -114,7 +114,7 @@ export default function AboutPage() {
               <span>{isArabic ? "قصتنا ورؤيتنا الأكاديمية" : "Our Story & Vision"}</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-black text-[#102A43] leading-tight">
-              {isArabic ? "منصة ريفيتشو .. جسرك نحو المستقبل" : "Revitcho Platform .. Your Bridge to the Future"}
+              {isArabic ? "منصة أورا .. جسرك نحو المستقبل" : "Academic Opportunities & Resources Access Platform .. Your Bridge to the Future"}
             </h1>
             <div className="h-2 w-32 bg-[#E9B44C] rounded-full" />
           </div>
@@ -129,8 +129,8 @@ export default function AboutPage() {
                   <h3 className="font-extrabold text-[#102A43] mb-1">{isArabic ? "تاريخ الانطلاق والنشأة" : "Launch & Origins"}</h3>
                   <p className="text-sm">
                     {isArabic 
-                      ? "انطلقت منصة ريفيتشو في عام 2026 كبادرة وطنية وأكاديمية متخصصة، وُلدت من رحم الحاجة الملحة لتمكين الطلاب الفلسطينيين في المخيمات والشتات من الوصول للفرص التعليمية العالمية بكل مأسسة واحترافية." 
-                      : "Launched in 2026, Revitcho was born out of the urgent need to empower Palestinian students in camps and diaspora."}
+                      ? "انطلقت منصة أورا في عام 2026 كبادرة وطنية وأكاديمية متخصصة، وُلدت من رحم الحاجة الملحة لتمكين الطلاب الفلسطينيين في المخيمات والشتات من الوصول للفرص التعليمية العالمية بكل مأسسة واحترافية." 
+                      : "Launched in 2026, Academic Opportunities & Resources Access {AORA} was born out of the urgent need to empower Palestinian students in camps and diaspora."}
                   </p>
                 </div>
               </div>

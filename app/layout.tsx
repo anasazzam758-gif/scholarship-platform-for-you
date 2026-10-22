@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
-import { Tajawal, Inter } from "next/font/google";
+import { Almarai } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import CustomCursor from "@/components/CustomCursor";
-import PageLoader from "@/components/PageLoader"; // 👈 استدعاء شاشة التحميل الاحترافية
+import PageLoader from "@/components/PageLoader";
 
-const tajawal = Tajawal({ 
-  subsets: ["arabic"], 
-  weight: ["400", "500", "700", "800"],
-  variable: "--font-tajawal" 
+// خط عربي محترم، رسمي، وواضح جداً للقراءة
+const almarai = Almarai({
+  subsets: ["arabic"],
+  weight: ["300", "400", "700", "800"],
+  variable: "--font-almarai"
 });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Revitcho | ريفيتشو",
-  description: "Your Educational Opportunities .. Start Here | فرصك التعليمية .. تبدأ، من هنا",
+  title: "AORA | أورا - المنح الدراسية",
+  description: "Opportunities & Resources Access | فرصك التعليمية .. تبدأ، من هنا",
+  icons: {
+    icon: "/public/logo-icon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -24,9 +27,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={`${tajawal.variable} ${inter.variable} font-tajawal bg-[#F7F5EF] text-[#102A43] min-h-screen selection:bg-[#176B61] selection:text-white`}>
+      <body className={`${almarai.variable} bg-[#F7F5EF] text-[#102A43] min-h-screen selection:bg-[#176B61] selection:text-white`}>
         <Providers>
-          <PageLoader /> {/* 👈 تفعيل التحميل الاحترافي */}
+          <PageLoader />
           <CustomCursor />
           {children}
         </Providers>

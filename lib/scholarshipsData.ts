@@ -7,13 +7,14 @@ export const SCHOLARSHIPS_DATA: Scholarship[] = [
     isVerified: true,
     openingDate: "2026-09-01",
     deadlineDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
-    title_ar: "منحة ريفيتشو للتميز الأكاديمي",
-    title_en: "Revitcho Academic Excellence Scholarship",
-    provider_ar: "مؤسسة ريفيتشو التعليمية",
-    provider_en: "Revitcho Educational Foundation",
+    title_ar: "منحة أورا للتميز الأكاديمي",
+    title_en: "AORA Academic Excellence Scholarship",
+    provider_ar: "مؤسسة أورا التعليمية",
+    provider_en: "AORA Educational Foundation",
     location_ar: "ألمانيا",
     location_en: "Germany",
     degree_levels: ["Bachelor", "Master"],
+    studyScope: "abroad",
   },
   {
     id: "2",
@@ -27,6 +28,7 @@ export const SCHOLARSHIPS_DATA: Scholarship[] = [
     location_ar: "المملكة المتحدة",
     location_en: "United Kingdom",
     degree_levels: ["Bachelor"],
+    studyScope: "abroad",
   },
   {
     id: "3",
@@ -40,5 +42,6 @@ export const SCHOLARSHIPS_DATA: Scholarship[] = [
     location_ar: "تركيا وأوروبا",
     location_en: "Turkey & Europe",
     degree_levels: ["Bachelor", "Master"],
+    studyScope: "both",
   }
 ];

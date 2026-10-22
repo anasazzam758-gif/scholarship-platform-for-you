@@ -17,7 +17,6 @@ export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: H
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* النص الرئيسي وشريط البحث */}
           <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#102A43] text-white text-sm font-bold shadow-sm">
               <Sparkles size={16} className="text-[#E9B44C]" />
@@ -44,11 +43,10 @@ export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: H
 
             <p className="text-lg md:text-xl text-[#102A43]/80 max-w-2xl leading-relaxed font-medium">
               {isArabic 
-                ? "ريفيتشو هو جسر يربط الطلاب الفلسطينيين في المخيمات والشتات بفرصهم التعليمية الموثوقة حول العالم، متسلحين بالعلم والإصرار نحو المستقبل." 
-                : "Revitcho is a bridge connecting Palestinian students in camps and the diaspora with verified educational opportunities worldwide."}
+                ? "أورا (AURA) هو جسر يربط الطلاب الفلسطينيين في المخيمات والشتات بفرصهم التعليمية الموثوقة حول العالم، متسلحين بالعلم والإصرار نحو المستقبل." 
+                : "AURA is a bridge connecting Palestinian students in camps and the diaspora with verified educational opportunities worldwide."}
             </p>
             
-            {/* شريط البحث الفوري */}
             <div className="bg-white p-3 rounded-2xl shadow-lg border border-[#102A43]/15 flex items-center gap-3 max-w-xl">
               <Search className="text-[#176B61] shrink-0 ms-2" size={22} />
               <input 
@@ -60,7 +58,6 @@ export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: H
               />
             </div>
 
-            {/* القيم الأربعة */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#102A43]/15">
               <div className="flex items-center gap-2.5">
                 <Sparkles className="text-[#E9B44C] shrink-0" size={20} />
@@ -81,7 +78,6 @@ export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: H
             </div>
           </div>
 
-          {/* قسم الصورة */}
           <div className="lg:col-span-5 relative group">
             <div className="absolute -inset-2 bg-gradient-to-tr from-[#102A43] to-[#E9B44C] rounded-3xl blur-md opacity-30 group-hover:opacity-60 transition duration-500"></div>
             <div className="relative rounded-3xl overflow-hidden border-4 border-[#102A43] shadow-2xl bg-[#102A43]">

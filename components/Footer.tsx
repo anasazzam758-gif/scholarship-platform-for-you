@@ -20,7 +20,6 @@ export default function Footer() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
 
-      // إذا كان الهدف قسم التواصل، نقوم بتفعيل تأثير التوهج والتكبير على زر الواتساب لفت الانتباه
       if (id === "footer-contact") {
         const whatsappBox = document.getElementById("whatsapp-glow-box");
         if (whatsappBox) {
@@ -39,25 +38,23 @@ export default function Footer() {
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
           
-          {/* الشعار والنبذة */}
           <div className="md:col-span-5 flex flex-col gap-4">
             <div className="flex items-center gap-3 group cursor-pointer" onClick={() => router.push("/")}>
               <div className="bg-[#F7F5EF] p-1.5 rounded-2xl shadow-md group-hover:scale-110 transition-transform">
                 <Logo />
               </div>
               <div>
-                <h3 className="text-2xl font-black text-white tracking-tight">Revitcho</h3>
-                <span className="text-sm font-bold text-[#E9B44C]">ريفيتشــو | المنح الدراسية الفلسطينية</span>
+                <h3 className="text-2xl font-black text-white tracking-tight">AORA</h3>
+                <span className="text-xs font-bold text-[#E9B44C]">Academic Opportunities & Resources Access</span>
               </div>
             </div>
             <p className="text-sm text-[#F7F5EF]/80 font-medium leading-relaxed">
               {isArabic 
-                ? "منصة تعليمية موثوقة لمساعدة الطلاب الفلسطينيين في المخيمات والشتات على الوصول للفرص الأكاديمية." 
-                : "A trusted educational platform helping Palestinian students in camps and diaspora access academic opportunities."}
+                ? "منصة أورا التعليمية الموثوقة لمساعدة الطلاب الفلسطينيين في المخيمات والشتات على الوصول للفرص الأكاديمية." 
+                : "AORA trusted educational platform helping Palestinian students in camps and diaspora access academic opportunities."}
             </p>
           </div>
 
-          {/* روابط سريعة */}
           <div className="md:col-span-3 flex flex-col gap-3">
             <h4 className="text-[#E9B44C] font-bold text-base mb-1">
               {isArabic ? "روابط سريعة" : "Quick Links"}
@@ -79,7 +76,6 @@ export default function Footer() {
             </Link>
           </div>
 
-          {/* تواصل معنا وزر الواتساب */}
           <div className="md:col-span-4 flex flex-col gap-3">
             <h4 className="text-[#E9B44C] font-bold text-base mb-1 flex items-center gap-2">
               <PhoneCall size={18} />
@@ -92,7 +88,6 @@ export default function Footer() {
                 : "If you have any questions or wish to provide moral or financial support, we are here to support you every step of the way."}
             </p>
             
-            {/* زر الواتساب مع معرف التوهج id="whatsapp-glow-box" */}
             <div className="relative inline-block w-fit mt-2">
               <div className="absolute -inset-1 rounded-2xl bg-[#25D366] opacity-75 blur-sm animate-pulse" />
               <a 
@@ -115,12 +110,11 @@ export default function Footer() {
 
         </div>
 
-        {/* حقوق النشر */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#F7F5EF]/70">
           <p>
             {isArabic 
-              ? "جميع الحقوق محفوظة لمنصة ريفيتشو © 2026" 
-              : "All rights reserved to Revitcho Platform © 2026"}
+              ? "جميع الحقوق محفوظة لمنصة AORA © 2026" 
+              : "All rights reserved to AORA Platform © 2026"}
           </p>
           <div className="flex items-center gap-1.5 font-medium">
             <span>{isArabic ? "صُنع بإتقان لدعم الطلاب الفلسطينيين" : "Crafted with care to support Palestinian students"}</span>

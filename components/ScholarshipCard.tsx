@@ -1,113 +1,118 @@
 "use client";
 
+import { Scholarship, getScholarshipStatus } from "@/lib/scholarships";
 import { useContext } from "react";
-import { LanguageContext, FavoritesContext } from "./Providers";
-import { getScholarshipStatus, Scholarship } from "@/lib/scholarships";
-import { Clock, Calendar, Lock, AlertCircle, CheckCircle, GraduationCap, MapPin, Building, ArrowUpLeft, ArrowUpRight, Heart } from "lucide-react";
+import { LanguageContext, FavoritesContext } from "@/components/Providers";
+import { MapPin, Building, Calendar, Heart, Globe, Home, CheckCircle, Clock, Lock, AlertCircle, GraduationCap } from "lucide-react";
 import Link from "next/link";
 
 export default function ScholarshipCard({ scholarship }: { scholarship: Scholarship }) {
   const { language } = useContext(LanguageContext);
-  const { isFavorite, toggleFavorite } = useContext(FavoritesContext);
-  
-  const status = getScholarshipStatus(scholarship);
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
   const isArabic = language === "ar";
-  const favorited = isFavorite(scholarship.id);
+
+  const isFavorite = favorites.includes(scholarship.id);
+  const status = getScholarshipStatus(scholarship);
 
   const statusConfig = {
-    open: {
-      color: "bg-[#E6F4F1] text-[#176B61] border-[#176B61]/30",
-      icon: <CheckCircle size={16} />,
-      label_ar: "متاحة الآن",
-      label_en: "Open Now",
-    },
-    closing_soon: {
-      color: "bg-red-100 text-red-700 border-red-300",
-      icon: <Clock size={16} />,
-      label_ar: "تغلق قريباً",
-      label_en: "Closing Soon",
-    },
-    upcoming: {
-      color: "bg-[#E0F2FE] text-[#0369A1] border-[#0369A1]/30",
-      icon: <Calendar size={16} />,
-      label_ar: "قريباً",
-      label_en: "Upcoming",
-    },
-    closed: {
-      color: "bg-slate-200 text-slate-700 border-slate-300",
-      icon: <Lock size={16} />,
-      label_ar: "مغلقة",
-      label_en: "Closed",
-    },
-    needs_verification: {
-      color: "bg-[#FEF3C7] text-[#B45309] border-[#E9B44C]",
-      icon: <AlertCircle size={16} />,
-      label_ar: "تحتاج إلى تحقق",
-      label_en: "Needs Verification",
-    }
+    open: { color: "bg-[#E6F4F1] text-[#176B61] border-[#176B61]/30", icon: <CheckCircle size={13} />, label_ar: "متاحة", label_en: "Open" },
+    closing_soon: { color: "bg-red-50 text-red-700 border-red-200", icon: <Clock size={13} />, label_ar: "تغلق قريباً", label_en: "Closing Soon" },
+    upcoming: { color: "bg-sky-50 text-sky-700 border-sky-200", icon: <Calendar size={13} />, label_ar: "قادمة", label_en: "Upcoming" },
+    closed: { color: "bg-slate-100 text-slate-600 border-slate-200", icon: <Lock size={13} />, label_ar: "مغلقة", label_en: "Closed" },
+    needs_verification: { color: "bg-amber-50 text-amber-700 border-amber-200", icon: <AlertCircle size={13} />, label_ar: "تدقيق", label_en: "Verify" }
   };
 
   const currentStatus = statusConfig[status];
 
-  return (
-    <div className="group flex flex-col bg-white rounded-3xl border border-[#102A43]/15 shadow-md hover:-translate-y-2.5 hover:scale-[1.01] hover:shadow-2xl hover:border-[#176B61] transition-all duration-300 p-7 md:p-8 gap-6 cursor-pointer relative">
-      
-      {/* شارة الحالة وزر القلب (حفظ المنحة) */}
-      <div className="flex justify-between items-center">
-        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-extrabold border ${currentStatus.color} group-hover:scale-105 transition-transform`}>
-          {currentStatus.icon}
-          {isArabic ? currentStatus.label_ar : currentStatus.label_en}
-        </span>
+  const scopeConfig = {
+    abroad: {
+      label_ar: "خارج بلد الإقامة",
+      label_en: "Study Abroad",
+      color: "bg-blue-50 text-blue-700 border-blue-200",
+      icon: <Globe size={13} />
+    },
+    local: {
+      label_ar: "داخل بلد الإقامة",
+      label_en: "Local Study",
+      color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      icon: <Home size={13} />
+    },
+    both: {
+      label_ar: "محلي ودولي",
+      label_en: "Local & Abroad",
+      color: "bg-purple-50 text-purple-700 border-purple-200",
+      icon: <Globe size={13} />
+    }
+  };
 
-        {/* زر القلب التفاعلي */}
+  const scope = scholarship.studyScope && scopeConfig[scholarship.studyScope] 
+    ? scopeConfig[scholarship.studyScope] 
+    : scopeConfig.abroad;
+
+  return (
+    <div className="card-hover bg-white rounded-3xl p-6 border border-[#102A43]/15 shadow-sm flex flex-col justify-between group relative">
+      
+      {/* الشارات العلوية + زر المفضلة */}
+      <div className="flex items-start justify-between gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-extrabold border ${currentStatus.color}`}>
+            {currentStatus.icon}
+            <span>{isArabic ? currentStatus.label_ar : currentStatus.label_en}</span>
+          </span>
+
+          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-extrabold border ${scope.color}`}>
+            {scope.icon}
+            <span>{isArabic ? scope.label_ar : scope.label_en}</span>
+          </span>
+        </div>
+
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            toggleFavorite(scholarship.id);
-          }}
-          className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
-            favorited 
-              ? "bg-red-50 text-red-500 border border-red-200 scale-110 shadow-sm" 
-              : "bg-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 border border-transparent"
-          }`}
-          title={isArabic ? "حفظ المنحة" : "Save Scholarship"}
+          onClick={() => toggleFavorite(scholarship.id)}
+          aria-label="Toggle Favorite"
+          className="p-2.5 rounded-full bg-[#F7F5EF] hover:bg-red-50 text-slate-400 hover:text-red-500 transition-all shrink-0 shadow-xs"
         >
-          <Heart size={18} className={favorited ? "fill-red-500 scale-110 transition-transform" : ""} />
+          <Heart size={18} className={isFavorite ? "fill-red-500 text-red-500 scale-110" : ""} />
         </button>
       </div>
 
-      {/* عنوان وتفاصيل المنحة */}
-      <div>
-        <h3 className="text-xl md:text-2xl font-black text-[#102A43] mb-5 group-hover:text-[#176B61] transition-colors leading-snug">
+      {/* تفاصيل الكارد */}
+      <div className="space-y-3">
+        <h3 className="text-xl font-black text-[#102A43] group-hover:text-[#176B61] transition-colors leading-snug line-clamp-2">
           {isArabic ? scholarship.title_ar : scholarship.title_en}
         </h3>
-        
-        <div className="flex flex-col gap-3 text-sm md:text-base text-[#102A43]/80 font-semibold">
-          <div className="flex items-center gap-3 group-hover:translate-x-1 transition-transform">
-            <Building size={19} className="shrink-0 text-[#E9B44C]" />
-            <span>{isArabic ? scholarship.provider_ar : scholarship.provider_en}</span>
+
+        <div className="space-y-2 text-sm text-slate-600 font-bold pt-1">
+          <div className="flex items-center gap-2">
+            <Building size={16} className="text-[#E9B44C] shrink-0" />
+            <span className="truncate">{isArabic ? scholarship.provider_ar : scholarship.provider_en}</span>
           </div>
-          <div className="flex items-center gap-3 group-hover:translate-x-1 transition-transform">
-            <MapPin size={19} className="shrink-0 text-[#176B61]" />
-            <span>{isArabic ? scholarship.location_ar : scholarship.location_en}</span>
+          <div className="flex items-center gap-2">
+            <MapPin size={16} className="text-[#176B61] shrink-0" />
+            <span className="truncate">{isArabic ? scholarship.location_ar : scholarship.location_en}</span>
           </div>
-          <div className="flex items-center gap-3 group-hover:translate-x-1 transition-transform">
-            <GraduationCap size={19} className="shrink-0 text-[#102A43]" />
-            <span>{scholarship.degree_levels.join(" • ")}</span>
+          <div className="flex items-center gap-2">
+            <GraduationCap size={16} className="text-[#102A43] shrink-0" />
+            <span className="truncate">{scholarship.degree_levels.join(" • ")}</span>
           </div>
         </div>
       </div>
 
-      {/* زر التفاصيل */}
-      <div className="mt-auto pt-5 border-t border-[#102A43]/10">
-        <Link 
+      {/* ذيل الكارد وزر التفاصيل */}
+      <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between">
+        <span className="text-xs font-extrabold text-slate-400">
+          {scholarship.deadlineDate 
+            ? `${isArabic ? "ينتهي:" : "Ends:"} ${new Date(scholarship.deadlineDate).toLocaleDateString(isArabic ? "ar-EG" : "en-US")}`
+            : (isArabic ? "محدثة" : "Updated")}
+        </span>
+
+        <Link
           href={`/scholarships/${scholarship.id}`}
-          className="w-full bg-[#176B61] hover:bg-[#12544C] text-white py-3 px-5 rounded-2xl font-extrabold transition-all duration-300 flex items-center justify-center gap-2.5 shadow-md group-hover:scale-[1.02] hover:shadow-xl"
+          className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-[#176B61] hover:bg-[#12544C] text-white text-xs font-extrabold transition-all shadow-sm"
         >
-          <span>{isArabic ? "عرض التفاصيل الكاملة" : "View Full Details"}</span>
-          {isArabic ? <ArrowUpLeft size={20} className="group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform" /> : <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
+          {isArabic ? "عرض التفاصيل" : "View Details"}
         </Link>
       </div>
+
     </div>
   );
 }
