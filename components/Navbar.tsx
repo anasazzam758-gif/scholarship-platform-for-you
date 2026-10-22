@@ -1,46 +1,45 @@
-"use client"; // Interactive component
+"use client";
 
 import { useContext } from "react";
 import { LanguageContext } from "./Providers";
-import { useTheme } from "next-themes";
-import { Moon, Sun, Globe } from "lucide-react"; // Import our Lucide icons
+import { Globe } from "lucide-react";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const { language, toggleLanguage } = useContext(LanguageContext);
-  const { theme, setTheme } = useTheme();
 
   return (
-    <nav className="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 p-4">
+    <nav className="sticky top-0 z-50 bg-[#F7F5EF]/90 backdrop-blur-md border-b border-[#176B61]/20 px-4 py-3.5 shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        {/* Logo/Brand Name */}
-        <h1 className="text-xl font-bold text-sky-700 dark:text-sky-400">
-          {language === "ar" ? "منصة المنح" : "Scholarships"}
-        </h1>
+        {/* اللوجو واسم المنصة */}
+        <div className="flex items-center gap-3 cursor-pointer group">
+          <div className="group-hover:scale-105 transition-transform duration-300">
+            <Logo />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-extrabold text-[#102A43] tracking-tight leading-none">
+              Revitcho
+            </h1>
+            <span className="text-sm font-bold text-[#176B61] mt-1 leading-none">
+              ريفيتشــو
+            </span>
+          </div>
+        </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-4">
-          
-          {/* Language Switcher */}
+        {/* زر تبديل اللغة فقط */}
+        <div className="flex items-center">
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-[#102A43] border border-[#102A43]/10 hover:bg-[#176B61] hover:text-white transition-all duration-300 shadow-xs cursor-pointer"
           >
-            <Globe size={20} />
-            <span className="font-semibold text-sm">
+            <Globe size={18} className="text-[#176B61] group-hover:text-white transition-colors" />
+            <span className="font-bold text-sm">
               {language === "ar" ? "English" : "العربية"}
             </span>
           </button>
-
-          {/* Theme Switcher */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-          >
-            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-
         </div>
+
       </div>
     </nav>
   );

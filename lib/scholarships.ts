@@ -11,6 +11,19 @@ export interface ScholarshipDates {
   deadlineDate: string | null; // Example: "2026-12-01"
 }
 
+
+// أضف هذا الكود في ملف lib/scholarships.ts
+
+// هذا النوع يمثل المنحة الكاملة التي سنعرضها في واجهة المستخدم
+export interface Scholarship extends ScholarshipDates {
+  title_ar: string;
+  title_en: string;
+  provider_ar: string;
+  provider_en: string;
+  location_ar: string;
+  location_en: string;
+  degree_levels: string[]; 
+}
 /**
  * FUNCTION 1: Get Scholarship Status
  * يحدد حالة المنحة بناءً على تاريخ اليوم

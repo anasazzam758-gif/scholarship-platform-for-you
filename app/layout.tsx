@@ -1,27 +1,28 @@
 import type { Metadata } from "next";
-import { Cairo, Inter } from "next/font/google";
+import { Tajawal, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 
-const cairo = Cairo({ subsets: ["arabic", "latin"], variable: "--font-cairo" });
+const tajawal = Tajawal({ 
+  subsets: ["arabic"], 
+  weight: ["400", "500", "700", "800"],
+  variable: "--font-tajawal" 
+});
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "منصة المنح الدراسية الفلسطينية | Palestinian Scholarships",
-  description: "Discover verified undergraduate scholarships for Palestinian students.",
+  title: "Revitcho | ريفيتشو",
+  description: "Your Educational Opportunities .. Start Here | فرصك التعليمية .. تبدأ، من هنا",
 };
 
-// This is the ONLY export default that should be in layout.tsx
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body
-        className={`${cairo.variable} ${inter.variable} font-cairo bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50 transition-colors duration-300 min-h-screen`}
-      >
+    <html lang="ar" dir="rtl">
+      <body className={`${tajawal.variable} ${inter.variable} font-tajawal bg-[#F7F5EF] text-[#102A43] min-h-screen`}>
         <Providers>
           {children}
         </Providers>
