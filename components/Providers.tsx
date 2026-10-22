@@ -2,20 +2,52 @@
 
 import { createContext, useState, useEffect, ReactNode } from "react";
 
-// سياق اللغة فقط (عربي افتراضياً)
 export const LanguageContext = createContext({
   language: "ar",
   toggleLanguage: () => {},
 });
 
+export const FavoritesContext = createContext<{
+  favorites: string[];
+  toggleFavorite: (id: string) => void;
+  isFavorite: (id: string) => boolean;
+}>({
+  favorites: [],
+  toggleFavorite: () => {},
+  isFavorite: () => false,
+});
+
 export function Providers({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState("ar");
+  const [favorites, setFavorites] = useState<string[]>([]);
 
-  // تحديث اتجاه الصفحة (RTL للعربي و LTR للإنجليزي)
   useEffect(() => {
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = language;
   }, [language]);
+
+  // استرجاع المنح المحفوظة من الـ localStorage عند فتح الموقع
+  useEffect(() => {
+    const saved = localStorage.getItem("revitcho_favorites");
+    if (saved) {
+      try {
+        setFavorites(JSON.parse(saved));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
+  // إضافة أو إزالة منحة من المفضلة وحفظها في الـ localStorage
+  const toggleFavorite = (id: string) => {
+    setFavorites((prev) => {
+      const updated = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
+      localStorage.setItem("revitcho_favorites", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const isFavorite = (id: string) => favorites.includes(id);
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === "ar" ? "en" : "ar"));
@@ -23,7 +55,9 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ language, toggleLanguage }}>
-      {children}
+      <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>
+        {children}
+      </FavoritesContext.Provider>
     </LanguageContext.Provider>
   );
 }

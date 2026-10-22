@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Tajawal, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import CustomCursor from "@/components/CustomCursor";
+import PageLoader from "@/components/PageLoader"; // 👈 استدعاء شاشة التحميل الاحترافية
 
 const tajawal = Tajawal({ 
   subsets: ["arabic"], 
@@ -22,8 +24,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={`${tajawal.variable} ${inter.variable} font-tajawal bg-[#F7F5EF] text-[#102A43] min-h-screen`}>
+      <body className={`${tajawal.variable} ${inter.variable} font-tajawal bg-[#F7F5EF] text-[#102A43] min-h-screen selection:bg-[#176B61] selection:text-white`}>
         <Providers>
+          <PageLoader /> {/* 👈 تفعيل التحميل الاحترافي */}
+          <CustomCursor />
           {children}
         </Providers>
       </body>
