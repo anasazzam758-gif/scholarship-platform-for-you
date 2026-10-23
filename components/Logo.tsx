@@ -1,11 +1,15 @@
 "use client";
 
-export default function Logo() {
+interface LogoProps {
+  className?: string;
+}
+
+export default function Logo({ className = "w-10 h-10" }: LogoProps) {
   return (
-    <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-[#F7F5EF] border border-[#176B61]/20 shadow-sm shrink-0">
+    <div className={`relative flex items-center justify-center shrink-0 ${className}`}>
       <svg
         viewBox="0 0 64 64"
-        className="w-10 h-10"
+        className="w-full h-full"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
