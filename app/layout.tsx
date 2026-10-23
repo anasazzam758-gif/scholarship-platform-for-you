@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Almarai } from "next/font/google";
 import "./globals.css";
-import Providers from "@/components/Providers";
+import { Providers } from "@/components/Providers";
 import CustomCursor from "@/components/CustomCursor";
 
 const almarai = Almarai({
