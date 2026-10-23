@@ -43,8 +43,8 @@ export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: H
 
             <p className="text-lg md:text-xl text-[#102A43]/80 max-w-2xl leading-relaxed font-medium">
               {isArabic 
-                ? "أورا (AURA) هو جسر يربط الطلاب الفلسطينيين في المخيمات والشتات بفرصهم التعليمية الموثوقة حول العالم، متسلحين بالعلم والإصرار نحو المستقبل." 
-                : "AURA is a bridge connecting Palestinian students in camps and the diaspora with verified educational opportunities worldwide."}
+                ? "أورا (AORA) هو جسر يربط الطلاب الفلسطينيين في المخيمات والشتات بفرصهم التعليمية الموثوقة حول العالم، متسلحين بالعلم والإصرار نحو المستقبل." 
+                : "AORA is a bridge connecting Palestinian students in camps and the diaspora with verified educational opportunities worldwide."}
             </p>
             
             <div className="bg-white p-3 rounded-2xl shadow-lg border border-[#102A43]/15 flex items-center gap-3 max-w-xl">
