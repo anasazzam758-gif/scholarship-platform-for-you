@@ -1,17 +1,52 @@
 // lib/scholarships.ts
 
-// 1. Define the exactly 5 statuses we agreed on in the requirements
 export type ScholarshipStatus = 'open' | 'closing_soon' | 'upcoming' | 'closed' | 'needs_verification';
 
-// 2. Define what a basic scholarship looks like for our math
+export interface ChecklistDocument {
+  id: string;
+  title_ar: string;
+  title_en: string;
+  note_ar?: string;
+  note_en?: string;
+  categoryId?: string;
+}
+
+export interface ChecklistCategory {
+  id: string;
+  title_ar: string;
+  title_en: string;
+  iconName?: string;
+}
+
+export interface PrepStage {
+  step: number;
+  title_ar: string;
+  title_en: string;
+  desc_ar: string;
+  desc_en: string;
+}
+
+export interface GuideSection {
+  id: string;
+  badge_ar: string;
+  badge_en: string;
+  title_ar: string;
+  title_en: string;
+  description_ar: string;
+  description_en: string;
+  items_ar: string[];
+  items_en: string[];
+  warning_ar?: string;
+  warning_en?: string;
+}
+
 export interface ScholarshipDates {
   id: string;
   isVerified: boolean;
-  openingDate: string | null;  // Example: "2026-11-01"
-  deadlineDate: string | null; // Example: "2026-12-01"
+  openingDate: string | null;
+  deadlineDate: string | null;
 }
 
-// هذا النوع يمثل المنحة الكاملة التي سنعرضها في واجهة المستخدم
 export interface Scholarship extends ScholarshipDates {
   title_ar: string;
   title_en: string;
@@ -19,16 +54,24 @@ export interface Scholarship extends ScholarshipDates {
   provider_en: string;
   location_ar: string;
   location_en: string;
-  degree_levels: string[]; 
-  studyScope?: 'abroad' | 'local' | 'both'; // 👈 أضفنا هذا السطر لتحديد نطاق الدراسة (خارج, محلي, كلاهما)
+  degree_levels: string[];
+  studyScope?: 'abroad' | 'local' | 'both';
+  officialLink?: string;
+  isFeatured?: boolean; // 👈 لجعل المنحة تظهر في أول القائمة دائماً
+  summary_ar?: string;
+  summary_en?: string;
+  eligibility_ar?: string[];
+  eligibility_en?: string[];
+  checklistCategories?: ChecklistCategory[];
+  checklist?: ChecklistDocument[];
+  prepStages?: PrepStage[];
+  guideSections?: GuideSection[];
+  importantNotes_ar?: string[];
+  importantNotes_en?: string[];
+  [key: string]: any;
 }
 
-/**
- * FUNCTION 1: Get Scholarship Status
- * يحدد حالة المنحة بناءً على تاريخ اليوم
- */
 export function getScholarshipStatus(scholarship: ScholarshipDates, currentDate: Date = new Date()): ScholarshipStatus {
-  // Rule 1: If it's not verified by admin, or missing dates
   if (!scholarship.isVerified || !scholarship.openingDate || !scholarship.deadlineDate) {
     return 'needs_verification';
   }
@@ -37,34 +80,25 @@ export function getScholarshipStatus(scholarship: ScholarshipDates, currentDate:
   const deadlineTime = new Date(scholarship.deadlineDate).getTime();
   const now = currentDate.getTime();
 
-  // Rule 2: If the opening date hasn't arrived yet
   if (now < openTime) {
     return 'upcoming';
   }
 
-  // Rule 3: If the deadline has already passed
   if (now > deadlineTime) {
     return 'closed';
   }
 
-  // Rule 4: If deadline is within the next 7 days (7 days * 24h * 60m * 60s * 1000ms)
   const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
   if (deadlineTime - now <= sevenDaysInMs) {
     return 'closing_soon';
   }
 
-  // Rule 5: If it's open and more than 7 days left
   return 'open';
 }
 
-/**
- * FUNCTION 2: Sort Scholarships
- * يرتب المنح: المفتوح أولاً، ثم القادم، ثم المغلق، ثم غير المؤكد
- */
-export function sortScholarships(scholarships: ScholarshipDates[]): ScholarshipDates[] {
-  // We assign a priority number to each status to sort them (Lower number = appears first)
+export function sortScholarships<T extends Scholarship>(scholarships: T[]): T[] {
   const statusPriority: Record<ScholarshipStatus, number> = {
-    'closing_soon': 1, // Most urgent!
+    'closing_soon': 1,
     'open': 2,
     'upcoming': 3,
     'closed': 4,
@@ -72,23 +106,23 @@ export function sortScholarships(scholarships: ScholarshipDates[]): ScholarshipD
   };
 
   return [...scholarships].sort((a, b) => {
+    // المنحة المميزة (مثل ULYP) تظهر أولاً دائماً
+    if (a.isFeatured && !b.isFeatured) return -1;
+    if (!a.isFeatured && b.isFeatured) return 1;
+
     const statusA = getScholarshipStatus(a);
     const statusB = getScholarshipStatus(b);
 
-    // 1. Sort by Status Priority first
     if (statusPriority[statusA] !== statusPriority[statusB]) {
       return statusPriority[statusA] - statusPriority[statusB];
     }
 
-    // 2. If both have the SAME status, sort by date
     const timeA = a.deadlineDate ? new Date(a.deadlineDate).getTime() : 0;
     const timeB = b.deadlineDate ? new Date(b.deadlineDate).getTime() : 0;
 
     if (statusA === 'closed') {
-      // For closed: show the MOST RECENTLY closed first (Descending)
       return timeB - timeA;
     } else {
-      // For open/upcoming: show the CLOSEST date first (Ascending)
       return timeA - timeB;
     }
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScholarshipCard from "@/components/ScholarshipCard";
@@ -9,7 +9,7 @@ import StatsDashboard from "@/components/home/StatsDashboard";
 import ScholarshipsFilter from "@/components/home/ScholarshipsFilter";
 import { LanguageContext } from "@/components/Providers";
 import { sortScholarships, getScholarshipStatus, Scholarship } from "@/lib/scholarships";
-import { SCHOLARSHIPS_DATA } from "@/lib/scholarshipsData";
+import { fetchScholarships } from "@/lib/scholarshipsData";
 
 export default function Home() {
   const { language } = useContext(LanguageContext);
@@ -19,7 +19,23 @@ export default function Home() {
   const [selectedDegree, setSelectedDegree] = useState("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  const sortedScholarships = sortScholarships(SCHOLARSHIPS_DATA) as Scholarship[];
+  // 1. State لحفظ المنح القادمة من Google Sheet وحالة التحميل
+  const [scholarships, setScholarships] = useState<Scholarship[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // 2. جلب البيانات فور فتح الموقع
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      const data = await fetchScholarships();
+      setScholarships(data);
+      setLoading(false);
+    }
+    loadData();
+  }, []);
+
+  // 3. ترتيب المنح وحساب الإحصائيات تلقائياً من البيانات الحية
+  const sortedScholarships = sortScholarships(scholarships) as Scholarship[];
 
   const totalCount = sortedScholarships.length;
   const openCount = sortedScholarships.filter(s => getScholarshipStatus(s) === "open").length;
@@ -43,13 +59,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#F7F5EF] text-[#102A43] flex flex-col">
-      {/* 1. شريط التنقل العلوي (يأخذ عرض الشاشة بالكامل والخلفية الزجاجية، والمحتوى بداخله على مقاس max-w-6xl) */}
       <Navbar />
       
-      {/* 2. حاوية المحتوى الرئيسي مع مسافة علوية مرتبة لمنع التداخل مع النافبار الثابت */}
       <div className="flex-1 w-full pt-6 space-y-12">
-        
-        {/* قسم عن المنصة / الرئيسية */}
         <div id="about-section">
           <HeroSection 
             searchQuery={searchQuery} 
@@ -58,7 +70,6 @@ export default function Home() {
           />
         </div>
 
-        {/* لوحة الإحصائيات */}
         <StatsDashboard 
           totalCount={totalCount}
           openCount={openCount}
@@ -69,8 +80,7 @@ export default function Home() {
           isArabic={isArabic}
         />
 
-        {/* قسم المنح المتاحة (يستخدم max-w-6xl تماماً مثل النافبار والفوتر) */}
-        <section id="scholarships-section" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <section id="scholarships-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div>
               <h3 className="text-2xl md:text-4xl font-black text-[#102A43]">
@@ -86,7 +96,13 @@ export default function Home() {
             />
           </div>
 
-          {filteredScholarships.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-20 bg-white rounded-3xl border border-[#102A43]/10 p-8 shadow-sm">
+              <p className="text-xl font-extrabold text-[#176B61] animate-pulse">
+                {isArabic ? "جاري تحميل أحدث المنح الدراسية..." : "Loading latest scholarships..."}
+              </p>
+            </div>
+          ) : filteredScholarships.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredScholarships.map((scholarship) => (
                 <ScholarshipCard key={scholarship.id} scholarship={scholarship} />
@@ -104,8 +120,7 @@ export default function Home() {
           )}
         </section>
 
-        {/* قسم التعليقات والآراء */}
-        <section id="feedback-section" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 border-t border-[#102A43]/10 pt-12">
+        <section id="feedback-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 border-t border-[#102A43]/10 pt-12">
           <div className="bg-white rounded-3xl p-8 md:p-12 border border-[#102A43]/15 shadow-sm text-center max-w-3xl mx-auto space-y-4">
             <h4 className="text-2xl font-black text-[#102A43]">
               {isArabic ? "رأيك يهمنا في تطوير أورا (AORA)" : "Your Feedback Matters to AORA"}
@@ -117,10 +132,8 @@ export default function Home() {
             </p>
           </div>
         </section>
-
       </div>
 
-      {/* 3. الفوتر (يأخذ عرض الشاشة بالكامل، والمحتوى بداخله على مقاس max-w-6xl ليتطابق مع النافبار بالملي) */}
       <Footer />
     </main>
   );

@@ -12,21 +12,26 @@ export default function Footer() {
   const router = useRouter();
   const isArabic = language === "ar";
 
-  const whatsAppNumber = "96170000000"; 
+  // 🔴 ضع رقمك الحقيقي هنا 
+  const whatsAppNumber = "970599000000"; 
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
+      // النزول السلس للفوتر
       element.scrollIntoView({ behavior: "smooth" });
 
+      // تشغيل تأثير التكبير والوميض على زر الواتساب
       if (id === "footer-contact") {
         const whatsappBox = document.getElementById("whatsapp-glow-box");
         if (whatsappBox) {
-          whatsappBox.classList.add("scale-110", "ring-4", "ring-[#E9B44C]", "bg-[#20ba5a]");
+          // إضافة كلاسات التكبير والحدود الصفراء
+          whatsappBox.classList.add("scale-110", "ring-4", "ring-[#E9B44C]", "z-10");
           setTimeout(() => {
-            whatsappBox.classList.remove("scale-110", "ring-4", "ring-[#E9B44C]", "bg-[#20ba5a]");
-          }, 3000);
+            // إزالتها بعد ثانيتين ليرجع لحجمه الطبيعي
+            whatsappBox.classList.remove("scale-110", "ring-4", "ring-[#E9B44C]", "z-10");
+          }, 2000);
         }
       }
     }
@@ -38,6 +43,7 @@ export default function Footer() {
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
           
+          {/* العمود الأول */}
           <div className="md:col-span-5 flex flex-col gap-4">
             <div className="flex items-center gap-3 group cursor-pointer" onClick={() => router.push("/")}>
               <div className="bg-[#F7F5EF] p-1.5 rounded-2xl shadow-md group-hover:scale-110 transition-transform">
@@ -55,6 +61,7 @@ export default function Footer() {
             </p>
           </div>
 
+          {/* العمود الثاني */}
           <div className="md:col-span-3 flex flex-col gap-3">
             <h4 className="text-[#E9B44C] font-bold text-base mb-1">
               {isArabic ? "روابط سريعة" : "Quick Links"}
@@ -68,7 +75,8 @@ export default function Footer() {
             <Link href="/about" className="hover:text-[#E9B44C] hover:translate-x-1.5 transition-all text-sm font-medium inline-block">
               {isArabic ? "عن المنصة" : "About Us"}
             </Link>
-            <a href="#footer-contact" onClick={(e) => scrollToSection(e, "footer-contact")} className="hover:text-[#E9B44C] hover:translate-x-1.5 transition-all text-sm font-medium inline-block">
+            {/* هذا الزر الذي يشغل الأنميشن */}
+            <a href="#footer-contact" onClick={(e) => scrollToSection(e, "footer-contact")} className="hover:text-[#E9B44C] hover:translate-x-1.5 transition-all text-sm font-medium inline-block cursor-pointer">
               {isArabic ? "تواصلوا معنا" : "Contact Us"}
             </a>
             <Link href="/about#feedback" className="hover:text-[#E9B44C] hover:translate-x-1.5 transition-all text-sm font-medium inline-block">
@@ -76,11 +84,14 @@ export default function Footer() {
             </Link>
           </div>
 
+          {/* العمود الثالث: المربع الأخضر الموحد */}
           <div className="md:col-span-4 flex flex-col gap-3">
-            <h4 className="text-[#E9B44C] font-bold text-base mb-1 flex items-center gap-2">
-              <PhoneCall size={18} />
-              <span>{isArabic ? "تواصل معنا" : "Contact Us"}</span>
-            </h4>
+            <div className="flex items-center gap-2 mb-1">
+              <PhoneCall size={20} className="text-[#E9B44C]" />
+              <h4 className="text-[#E9B44C] font-bold text-base">
+                {isArabic ? "تواصل معنا" : "Contact Us"}
+              </h4>
+            </div>
             
             <p className="text-xs text-[#F7F5EF]/85 leading-relaxed font-medium">
               {isArabic 
@@ -88,37 +99,39 @@ export default function Footer() {
                 : "If you have any questions or wish to provide moral or financial support, we are here to support you every step of the way."}
             </p>
             
-            <div className="relative inline-block w-fit mt-2">
-              <div className="absolute -inset-1 rounded-2xl bg-[#25D366] opacity-75 blur-sm animate-pulse" />
+            {/* الحل الجذري للمربع الأخضر ليظهر بشكل سليم على كل الشاشات */}
+            <div className="relative w-full sm:w-fit mt-3">
+              <div className="absolute -inset-1 rounded-2xl bg-[#25D366] opacity-75 blur-md animate-pulse" />
               <a 
                 id="whatsapp-glow-box"
-                href={`https://wa.me/${whatsAppNumber}`} 
+                href={`https://wa.me/${whatsAppNumber}?text=مرحباً%20منصة%20AORA`}
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="relative inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-sm font-black transition-all duration-300 shadow-xl hover:scale-110 cursor-pointer"
+                className="relative flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-sm font-black transition-all duration-500 shadow-xl w-full"
               >
-                <MessageCircle size={20} className="animate-bounce" />
+                <MessageCircle size={22} className="shrink-0" />
                 <span>{isArabic ? "انقر هنا للتواصل عبر الواتساب" : "Click to Chat via WhatsApp"}</span>
               </a>
             </div>
 
-            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white/5 w-fit text-xs text-[#E9B44C] border border-white/10">
-              <ShieldCheck size={14} />
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 w-fit text-xs text-[#E9B44C] border border-white/10">
+              <ShieldCheck size={16} className="shrink-0" />
               <span>{isArabic ? "دعم متواصل ومخصص للطلبة" : "Dedicated student support"}</span>
             </div>
           </div>
 
         </div>
 
+        {/* حقوق النشر */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#F7F5EF]/70">
-          <p>
+          <p className="text-center sm:text-right">
             {isArabic 
               ? "جميع الحقوق محفوظة لمنصة AORA © 2026" 
               : "All rights reserved to AORA Platform © 2026"}
           </p>
-          <div className="flex items-center gap-1.5 font-medium">
+          <div className="flex items-center justify-center gap-1.5 font-medium">
             <span>{isArabic ? "صُنع بإتقان لدعم الطلاب الفلسطينيين" : "Crafted with care to support Palestinian students"}</span>
-            <Heart size={14} className="text-red-400 fill-red-400 hover:scale-125 transition-transform" />
+            <Heart size={14} className="text-red-400 fill-red-400 shrink-0 hover:scale-125 transition-transform" />
           </div>
         </div>
 
