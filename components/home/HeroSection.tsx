@@ -3,10 +3,12 @@
 import { Sparkles, ShieldCheck, Sprout, Users } from "lucide-react";
 
 interface HeroSectionProps {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
   isArabic: boolean;
 }
 
-export default function HeroSection({ isArabic }: HeroSectionProps) {
+export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden py-16 md:py-24 border-b border-[#102A43]/10">
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#E9B44C]/20 rounded-full blur-3xl pointer-events-none" />
@@ -23,7 +25,7 @@ export default function HeroSection({ isArabic }: HeroSectionProps) {
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-black text-[#102A43] leading-tight">
+            <h2 className="text-4xl md:text-6xl font-black text-[#102A43] leading-tight dark:text-white">
               {isArabic ? (
                 <>
                   من الطموح...
@@ -39,7 +41,7 @@ export default function HeroSection({ isArabic }: HeroSectionProps) {
               )}
             </h2>
 
-            <p className="text-lg md:text-xl text-[#102A43]/80 max-w-2xl leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-[#102A43]/80 dark:text-[#F7F5EF]/80 max-w-2xl leading-relaxed font-medium">
               {isArabic 
                 ? "أورا (AORA) هو جسر يربط الطلاب الفلسطينيين في المخيمات والشتات بفرصهم التعليمية الموثوقة حول العالم، متسلحين بالعلم والإصرار نحو المستقبل." 
                 : "AORA is a bridge connecting Palestinian students in camps and the diaspora with verified educational opportunities worldwide."}
@@ -48,19 +50,19 @@ export default function HeroSection({ isArabic }: HeroSectionProps) {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#102A43]/15">
               <div className="flex items-center gap-2.5">
                 <Sparkles className="text-[#E9B44C] shrink-0" size={20} />
-                <span className="text-sm font-bold text-[#102A43]">{isArabic ? "فرص حقيقية" : "Real Opportunities"}</span>
+                <span className="text-sm font-bold text-[#102A43] dark:text-white">{isArabic ? "فرص حقيقية" : "Real Opportunities"}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <ShieldCheck className="text-[#176B61] shrink-0" size={20} />
-                <span className="text-sm font-bold text-[#102A43]">{isArabic ? "موثوقية عالية" : "Trusted Info"}</span>
+                <span className="text-sm font-bold text-[#102A43] dark:text-white">{isArabic ? "موثوقية عالية" : "Trusted Info"}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Sprout className="text-[#176B61] shrink-0" size={20} />
-                <span className="text-sm font-bold text-[#102A43]">{isArabic ? "نمو وتطور" : "Growth"}</span>
+                <span className="text-sm font-bold text-[#102A43] dark:text-white">{isArabic ? "نمو وتطور" : "Growth"}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Users className="text-[#E9B44C] shrink-0" size={20} />
-                <span className="text-sm font-bold text-[#102A43]">{isArabic ? "دعم المجتمع" : "Community"}</span>
+                <span className="text-sm font-bold text-[#102A43] dark:text-white">{isArabic ? "دعم المجتمع" : "Community"}</span>
               </div>
             </div>
           </div>
