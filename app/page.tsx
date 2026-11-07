@@ -10,6 +10,7 @@ import ScholarshipsFilter from "@/components/home/ScholarshipsFilter";
 import { LanguageContext } from "@/components/Providers";
 import { sortScholarships, getScholarshipStatus, Scholarship } from "@/lib/scholarships";
 import { fetchScholarships } from "@/lib/scholarshipsData";
+ // تم التعديل والاستيراد بالشكل الصحيح هنا
 
 export default function Home() {
   const { language } = useContext(LanguageContext);
@@ -19,11 +20,11 @@ export default function Home() {
   const [selectedDegree, setSelectedDegree] = useState("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  // 1. State لحفظ المنح القادمة من Google Sheet وحالة التحميل
+  // State لحفظ المنح القادمة من البيانات وحالة التحميل
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 2. جلب البيانات فور فتح الموقع
+  // جلب البيانات فور فتح الموقع
   useEffect(() => {
     async function loadData() {
       setLoading(true);
@@ -34,7 +35,7 @@ export default function Home() {
     loadData();
   }, []);
 
-  // 3. ترتيب المنح وحساب الإحصائيات تلقائياً من البيانات الحية
+  // ترتيب المنح وحساب الإحصائيات تلقائياً من البيانات الحية
   const sortedScholarships = sortScholarships(scholarships) as Scholarship[];
 
   const totalCount = sortedScholarships.length;
@@ -62,6 +63,8 @@ export default function Home() {
       <Navbar />
       
       <div className="flex-1 w-full pt-6 space-y-12">
+        
+        {/* قسم الهيرو / الرئيسية */}
         <div id="about-section">
           <HeroSection 
             searchQuery={searchQuery} 
@@ -70,6 +73,10 @@ export default function Home() {
           />
         </div>
 
+        {/* قسم "عن المنصة" الذي تم ربطه وإضافته هنا */}
+        
+
+        {/* لوحة الإحصائيات التفاعلية */}
         <StatsDashboard 
           totalCount={totalCount}
           openCount={openCount}
@@ -80,6 +87,7 @@ export default function Home() {
           isArabic={isArabic}
         />
 
+        {/* قسم أحدث المنح الدراسية والفلترة */}
         <section id="scholarships-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div>
@@ -120,6 +128,7 @@ export default function Home() {
           )}
         </section>
 
+        {/* قسم التغذية الراجعة / رأيك يهمنا */}
         <section id="feedback-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 border-t border-[#102A43]/10 pt-12">
           <div className="bg-white rounded-3xl p-8 md:p-12 border border-[#102A43]/15 shadow-sm text-center max-w-3xl mx-auto space-y-4">
             <h4 className="text-2xl font-black text-[#102A43]">

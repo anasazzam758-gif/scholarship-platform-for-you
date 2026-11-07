@@ -1,142 +1,199 @@
+
 "use client";
 
 import { useContext, useEffect, useState } from "react";
+import Link from "next/link";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScholarshipCard from "@/components/ScholarshipCard";
-import HeroSection from "@/components/home/HeroSection";
-import StatsDashboard from "@/components/home/StatsDashboard";
-import ScholarshipsFilter from "@/components/home/ScholarshipsFilter";
-import { LanguageContext } from "@/components/Providers";
-import { sortScholarships, getScholarshipStatus, Scholarship } from "@/lib/scholarships";
+
+import { LanguageContext, FavoritesContext } from "@/components/Providers";
+import { Scholarship, sortScholarships } from "@/lib/scholarships";
 import { fetchScholarships } from "@/lib/scholarshipsData";
 
-export default function Home() {
+import { Heart, ArrowLeft, Search } from "lucide-react";
+
+export default function FavoritesPage() {
   const { language } = useContext(LanguageContext);
+  const { favorites } = useContext(FavoritesContext);
+
   const isArabic = language === "ar";
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDegree, setSelectedDegree] = useState("all");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-
-  // 1. State لحفظ المنح القادمة من Google Sheet وحالة التحميل
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  // 2. جلب البيانات فور فتح الموقع
+  // جلب المنح من Google Sheets
   useEffect(() => {
     async function loadData() {
-      setLoading(true);
-      const data = await fetchScholarships();
-      setScholarships(data);
-      setLoading(false);
+      try {
+        setLoading(true);
+        setError(false);
+
+        const data = await fetchScholarships();
+        setScholarships(data);
+      } catch (err) {
+        console.error("Failed to load scholarships:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     }
+
     loadData();
   }, []);
 
-  // 3. ترتيب المنح وحساب الإحصائيات تلقائياً من البيانات الحية
-  const sortedScholarships = sortScholarships(scholarships) as Scholarship[];
+  // ترتيب المنح
+  const sortedScholarships = sortScholarships(
+    scholarships
+  ) as Scholarship[];
 
-  const totalCount = sortedScholarships.length;
-  const openCount = sortedScholarships.filter(s => getScholarshipStatus(s) === "open").length;
-  const closingSoonCount = sortedScholarships.filter(s => getScholarshipStatus(s) === "closing_soon").length;
-  const upcomingCount = sortedScholarships.filter(s => getScholarshipStatus(s) === "upcoming").length;
-
-  const filteredScholarships = sortedScholarships.filter((scholarship) => {
-    const query = searchQuery.toLowerCase();
-    const title = (isArabic ? scholarship.title_ar : scholarship.title_en).toLowerCase();
-    const provider = (isArabic ? scholarship.provider_ar : scholarship.provider_en).toLowerCase();
-    const location = (isArabic ? scholarship.location_ar : scholarship.location_en).toLowerCase();
-
-    const matchesSearch = title.includes(query) || provider.includes(query) || location.includes(query);
-    const matchesDegree = selectedDegree === "all" || scholarship.degree_levels.includes(selectedDegree);
-    
-    const status = getScholarshipStatus(scholarship);
-    const matchesStatus = statusFilter === "all" || status === statusFilter;
-
-    return matchesSearch && matchesDegree && matchesStatus;
-  });
+  // عرض المنح التي أضافها المستخدم للمفضلة فقط
+  const favoriteScholarships = sortedScholarships.filter(
+    (scholarship) => favorites.includes(scholarship.id)
+  );
 
   return (
     <main className="min-h-screen bg-[#F7F5EF] text-[#102A43] flex flex-col">
       <Navbar />
-      
-      <div className="flex-1 w-full pt-6 space-y-12">
-        
-        {/* قسم عن المنصة / الرئيسية */}
-        <div id="about-section">
-          <HeroSection 
-            searchQuery={searchQuery} 
-            setSearchQuery={setSearchQuery} 
-            isArabic={isArabic} 
-          />
-        </div>
 
-        {/* لوحة الإحصائيات */}
-        <StatsDashboard 
-          totalCount={totalCount}
-          openCount={openCount}
-          closingSoonCount={closingSoonCount}
-          upcomingCount={upcomingCount}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          isArabic={isArabic}
-        />
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-        {/* قسم المنح المتاحة */}
-        <section id="scholarships-section" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-            <div>
-              <h3 className="text-2xl md:text-4xl font-black text-[#102A43]">
-                {isArabic ? "أحدث المنح الدراسية" : "Latest Scholarships"}
-              </h3>
-              <div className="h-2 w-28 bg-[#E9B44C] rounded-full mt-2" />
+        {/* عنوان الصفحة */}
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-red-50 p-3 rounded-2xl">
+              <Heart
+                size={28}
+                className="text-red-500 fill-red-500"
+              />
             </div>
 
-            <ScholarshipsFilter 
-              selectedDegree={selectedDegree} 
-              setSelectedDegree={setSelectedDegree} 
-              isArabic={isArabic} 
-            />
+            <h1 className="text-3xl md:text-4xl font-black text-[#102A43]">
+              {isArabic ? "منحي المفضلة" : "My Saved Scholarships"}
+            </h1>
           </div>
 
-          {loading ? (
-            <div className="text-center py-20 bg-white rounded-3xl border border-[#102A43]/10 p-8 shadow-sm">
-              <p className="text-xl font-extrabold text-[#176B61] animate-pulse">
-                {isArabic ? "جاري تحميل أحدث المنح الدراسية..." : "Loading latest scholarships..."}
-              </p>
-            </div>
-          ) : filteredScholarships.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredScholarships.map((scholarship) => (
-                <ScholarshipCard key={scholarship.id} scholarship={scholarship} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 bg-white rounded-3xl border border-[#102A43]/10 p-8 shadow-sm">
-              <p className="text-xl font-bold text-[#102A43] mb-2">
-                {isArabic ? "لم نجد نتائج تطابق بحثك أو اختيارك" : "No scholarships found matching your filter"}
-              </p>
-              <p className="text-sm text-slate-500">
-                {isArabic ? "جرب الضغط على 'إجمالي المنح' لإعادة عرض كافة الفرص المتاحة." : "Try clicking 'Total Scholarships' to reset status filter."}
-              </p>
+          <p className="text-slate-500 font-medium">
+            {isArabic
+              ? "جميع المنح الدراسية التي قمت بحفظها للوصول إليها بسهولة."
+              : "All the scholarships you saved for easy access."}
+          </p>
+
+          {!loading && !error && (
+            <div className="mt-5 inline-flex items-center gap-2 bg-white border border-[#102A43]/10 px-4 py-2 rounded-xl shadow-sm">
+              <Heart size={16} className="text-red-500" />
+              <span className="font-extrabold text-[#176B61]">
+                {favorites.length}
+              </span>
+              <span className="text-sm font-bold text-slate-500">
+                {isArabic ? "منحة محفوظة" : "Saved Scholarships"}
+              </span>
             </div>
           )}
-        </section>
+        </div>
 
-        {/* قسم التعليقات والآراء */}
-        <section id="feedback-section" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 border-t border-[#102A43]/10 pt-12">
-          <div className="bg-white rounded-3xl p-8 md:p-12 border border-[#102A43]/15 shadow-sm text-center max-w-3xl mx-auto space-y-4">
-            <h4 className="text-2xl font-black text-[#102A43]">
-              {isArabic ? "رأيك يهمنا في تطوير أورا (AORA)" : "Your Feedback Matters to AORA"}
-            </h4>
-            <p className="text-slate-600 text-sm md:text-base font-medium">
-              {isArabic 
-                ? "نحن نطور هذه المنصة خصيصاً لتكون السند الأفضل لكل طالب فلسطيني. تواصل معنا عبر الواتساب لأي اقتراح أو تعليق!" 
-                : "We are developing this platform to be the best support for every Palestinian student. Contact us via WhatsApp for any feedback!"}
-            </p>
+        {/* العودة للرئيسية */}
+        <div className="mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[#176B61] hover:text-[#102A43] font-bold transition-colors"
+          >
+            <ArrowLeft size={18} />
+            {isArabic ? "العودة إلى الرئيسية" : "Back to Home"}
+          </Link>
+        </div>
+
+        {/* حالة التحميل */}
+        {loading ? (
+          <div className="text-center py-24 bg-white rounded-3xl border border-[#102A43]/10 shadow-sm">
+            <div className="animate-pulse flex flex-col items-center gap-4">
+              <Heart size={40} className="text-red-400" />
+              <p className="text-lg font-extrabold text-[#176B61]">
+                {isArabic
+                  ? "جاري تحميل منحك المفضلة..."
+                  : "Loading your saved scholarships..."}
+              </p>
+            </div>
           </div>
-        </section>
+        ) : error ? (
+          /* حالة الخطأ */
+          <div className="text-center py-20 bg-white rounded-3xl border border-red-100 shadow-sm">
+            <p className="text-xl font-black text-red-600 mb-3">
+              {isArabic
+                ? "حدث خطأ أثناء تحميل المنح"
+                : "Failed to load scholarships"}
+            </p>
+
+            <p className="text-slate-500 mb-6">
+              {isArabic
+                ? "يرجى تحديث الصفحة والمحاولة مرة أخرى."
+                : "Please refresh the page and try again."}
+            </p>
+
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-[#176B61] text-white rounded-xl font-bold hover:bg-[#12544C]"
+            >
+              {isArabic ? "إعادة المحاولة" : "Try Again"}
+            </button>
+          </div>
+        ) : favoriteScholarships.length > 0 ? (
+          /* عرض المنح المحفوظة */
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl md:text-2xl font-black">
+                {isArabic ? "المنح المحفوظة" : "Saved Scholarships"}
+              </h2>
+
+              <span className="text-sm font-bold text-slate-400">
+                {favoriteScholarships.length}{" "}
+                {isArabic ? "نتيجة" : "Results"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {favoriteScholarships.map((scholarship) => (
+                <ScholarshipCard
+                  key={scholarship.id}
+                  scholarship={scholarship}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          /* حالة عدم وجود منح محفوظة */
+          <div className="text-center py-20 px-6 bg-white rounded-3xl border border-[#102A43]/10 shadow-sm">
+
+            <div className="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
+              <Heart size={38} className="text-red-300" />
+            </div>
+
+            <h2 className="text-2xl font-black text-[#102A43] mb-3">
+              {isArabic
+                ? "قائمة المفضلة فارغة!"
+                : "Your Favorites Are Empty!"}
+            </h2>
+
+            <p className="text-slate-500 max-w-md mx-auto mb-8 leading-relaxed">
+              {isArabic
+                ? "لم تقم بحفظ أي منحة حتى الآن. تصفح المنح الدراسية واضغط على رمز القلب لحفظ الفرص التي تهمك."
+                : "You haven't saved any scholarships yet. Browse scholarships and click the heart icon to save opportunities you're interested in."}
+            </p>
+
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#176B61] hover:bg-[#12544C] text-white rounded-xl font-extrabold shadow-md transition-all"
+            >
+              <Search size={18} />
+              {isArabic
+                ? "اكتشف المنح الدراسية"
+                : "Explore Scholarships"}
+            </Link>
+
+          </div>
+        )}
 
       </div>
 

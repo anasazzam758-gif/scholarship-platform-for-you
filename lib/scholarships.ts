@@ -57,7 +57,7 @@ export interface Scholarship extends ScholarshipDates {
   degree_levels: string[];
   studyScope?: 'abroad' | 'local' | 'both';
   officialLink?: string;
-  isFeatured?: boolean; // 👈 لجعل المنحة تظهر في أول القائمة دائماً
+  isFeatured?: boolean; 
   summary_ar?: string;
   summary_en?: string;
   eligibility_ar?: string[];
@@ -88,8 +88,9 @@ export function getScholarshipStatus(scholarship: ScholarshipDates, currentDate:
     return 'closed';
   }
 
-  const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-  if (deadlineTime - now <= sevenDaysInMs) {
+  // تم ضبطها هنا لتعمل على 30 يوماً (شهر كامل) أو يمكنك تعديلها إلى 20 يوماً
+  const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+  if (deadlineTime - now <= thirtyDaysInMs) {
     return 'closing_soon';
   }
 
@@ -106,7 +107,6 @@ export function sortScholarships<T extends Scholarship>(scholarships: T[]): T[] 
   };
 
   return [...scholarships].sort((a, b) => {
-    // المنحة المميزة (مثل ULYP) تظهر أولاً دائماً
     if (a.isFeatured && !b.isFeatured) return -1;
     if (!a.isFeatured && b.isFeatured) return 1;
 

@@ -12,9 +12,6 @@ export default function Footer() {
   const router = useRouter();
   const isArabic = language === "ar";
 
-  // 🔴 ضع رقمك الحقيقي هنا 
-  const whatsAppNumber = "970599000000"; 
-
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);
@@ -26,10 +23,8 @@ export default function Footer() {
       if (id === "footer-contact") {
         const whatsappBox = document.getElementById("whatsapp-glow-box");
         if (whatsappBox) {
-          // إضافة كلاسات التكبير والحدود الصفراء
           whatsappBox.classList.add("scale-110", "ring-4", "ring-[#E9B44C]", "z-10");
           setTimeout(() => {
-            // إزالتها بعد ثانيتين ليرجع لحجمه الطبيعي
             whatsappBox.classList.remove("scale-110", "ring-4", "ring-[#E9B44C]", "z-10");
           }, 2000);
         }
@@ -75,7 +70,6 @@ export default function Footer() {
             <Link href="/about" className="hover:text-[#E9B44C] hover:translate-x-1.5 transition-all text-sm font-medium inline-block">
               {isArabic ? "عن المنصة" : "About Us"}
             </Link>
-            {/* هذا الزر الذي يشغل الأنميشن */}
             <a href="#footer-contact" onClick={(e) => scrollToSection(e, "footer-contact")} className="hover:text-[#E9B44C] hover:translate-x-1.5 transition-all text-sm font-medium inline-block cursor-pointer">
               {isArabic ? "تواصلوا معنا" : "Contact Us"}
             </a>
@@ -84,7 +78,7 @@ export default function Footer() {
             </Link>
           </div>
 
-          {/* العمود الثالث: المربع الأخضر الموحد */}
+          {/* العمود الثالث */}
           <div className="md:col-span-4 flex flex-col gap-3">
             <div className="flex items-center gap-2 mb-1">
               <PhoneCall size={20} className="text-[#E9B44C]" />
@@ -99,12 +93,11 @@ export default function Footer() {
                 : "If you have any questions or wish to provide moral or financial support, we are here to support you every step of the way."}
             </p>
             
-            {/* الحل الجذري للمربع الأخضر ليظهر بشكل سليم على كل الشاشات */}
             <div className="relative w-full sm:w-fit mt-3">
               <div className="absolute -inset-1 rounded-2xl bg-[#25D366] opacity-75 blur-md animate-pulse" />
               <a 
                 id="whatsapp-glow-box"
-                href={`"https://wa.me/96181972753?text=مرحباً%20منصة%20AORA"`}
+                href="https://wa.me/96181972753?text=مرحباً%20منصة%20AORA"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="relative flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-sm font-black transition-all duration-500 shadow-xl w-full"

@@ -1,14 +1,12 @@
 "use client";
 
-import { Search, Sparkles, ShieldCheck, Sprout, Users } from "lucide-react";
+import { Sparkles, ShieldCheck, Sprout, Users } from "lucide-react";
 
 interface HeroSectionProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
   isArabic: boolean;
 }
 
-export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: HeroSectionProps) {
+export default function HeroSection({ isArabic }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden py-16 md:py-24 border-b border-[#102A43]/10">
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#E9B44C]/20 rounded-full blur-3xl pointer-events-none" />
@@ -46,17 +44,6 @@ export default function HeroSection({ searchQuery, setSearchQuery, isArabic }: H
                 ? "أورا (AORA) هو جسر يربط الطلاب الفلسطينيين في المخيمات والشتات بفرصهم التعليمية الموثوقة حول العالم، متسلحين بالعلم والإصرار نحو المستقبل." 
                 : "AORA is a bridge connecting Palestinian students in camps and the diaspora with verified educational opportunities worldwide."}
             </p>
-            
-            <div className="bg-white p-3 rounded-2xl shadow-lg border border-[#102A43]/15 flex items-center gap-3 max-w-xl">
-              <Search className="text-[#176B61] shrink-0 ms-2" size={22} />
-              <input 
-                type="text"
-                placeholder={isArabic ? "ابحث عن منحة، دولة، أو جهة مانحة..." : "Search scholarship, country, or provider..."}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent outline-none text-[#102A43] placeholder:text-slate-400 font-medium text-sm md:text-base"
-              />
-            </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#102A43]/15">
               <div className="flex items-center gap-2.5">
