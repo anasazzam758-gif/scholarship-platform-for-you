@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* تفعيل الدارك مود عبر الكلاس في Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -11,7 +10,6 @@
   html {
     font-size: 14px;
     scroll-behavior: smooth;
-    /* إزالة المربع الأزرق المزعج عند الكبس على التليفون */
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -21,14 +19,12 @@
     }
   }
 
-  /* إخفاء الماوس الافتراضي فقط على الكمبيوتر */
   @media (pointer: fine) {
     *, *::before, *::after {
       cursor: none !important;
     }
   }
 
-  /* على التليفون والتابلت: الماوس واللمس طبيعي 100% */
   @media (pointer: coarse) {
     *, *::before, *::after {
       cursor: auto !important;
@@ -40,37 +36,36 @@
     -webkit-font-smoothing: antialiased;
     font-size: 1rem;
     line-height: 1.6;
-    background-color: #F7F5EF;
-    color: #102A43;
+    background-color: #F7F5EF; /* لايت مود: بيج هادي */
+    color: #102A43; 
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* ألوان خلفية ونص الدارك مود الأساسية */
+  /* 🔥 تعديل الدارك مود ليكون أرقى وأهدى للعين 🔥 */
   html.dark body,
   body.dark {
-    background-color: #0B192C;
-    color: #F7F5EF;
+    background-color: #121212; /* رمادي داكن جداً (Modern Dark) بدل الكحلي */
+    color: #E4E4E7; /* أبيض مائل للرمادي المريح (Zinc-200) */
   }
 
   a, button, input, select, textarea {
     transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  /* تفاعل الكبسة على التليفون والكمبيوتر: يصغر شوي لما تكبس ويرجع فوراً لما تشيل إيدك */
   button:active, a:active {
     transform: scale(0.96) !important;
   }
 }
 
-/* إخفاء الماوس المخصص فقط على الموبايل (بدون إخفاء الأزرار التي تحتوي cursor-pointer!) */
+/* إخفاء الماوس المخصص فقط على الموبايل */
 @media (pointer: coarse), (max-width: 768px) {
   #custom-cursor, .custom-cursor {
     display: none !important;
   }
 }
 
-/* هوفر البطاقات والأزرار على الكمبيوتر فقط حتى لا تعلق على التليفون */
+/* هوفر البطاقات والأزرار على الكمبيوتر فقط */
 .card-hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -98,15 +93,12 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F5EF;
-}
-html.dark ::-webkit-scrollbar-track {
-  background: #0B192C;
+  background: transparent; /* خليته شفاف عشان ياخذ لون الخلفية تلقائي */
 }
 ::-webkit-scrollbar-thumb {
-  background: #102A43;
+  background: #cbd5e1; /* لون السكرول باللايت مود */
   border-radius: 9999px;
 }
 html.dark ::-webkit-scrollbar-thumb {
-  background: #176B61;
+  background: #3f3f46; /* لون السكرول بالدارك مود (رمادي أنيق) */
 }

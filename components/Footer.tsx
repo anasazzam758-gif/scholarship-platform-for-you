@@ -104,7 +104,7 @@ export default function Footer() {
               <div className="absolute -inset-1 rounded-2xl bg-[#25D366] opacity-75 blur-md animate-pulse" />
               <a 
                 id="whatsapp-glow-box"
-                href={`https://wa.me/${whatsAppNumber}?text=مرحباً%20منصة%20AORA`}
+                href={`"https://wa.me/96181972753?text=مرحباً%20منصة%20AORA"`}
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="relative flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-sm font-black transition-all duration-500 shadow-xl w-full"
